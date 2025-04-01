@@ -2,6 +2,15 @@ package ru.ltz.general;
 
 public record Triangle (double side1, double side2, double side3) {
 
+    public Triangle {
+        if (side1 < 0 || side2 < 0 || side3 < 0) {
+            throw new IllegalArgumentException("Сторона треугольника не может быть отрицательной");
+        }
+        if ( (side1 + side2) < side3 || (side1 + side3) < side2 || (side2 + side3) < side1 ) {
+            throw new IllegalArgumentException("Сумма 2-х любых сторон треугольника должна быть не меньше третьей стороны");
+        }
+    }
+
     public double calculatePerimeter() {
         return this.side1 + this.side2 +this.side3;
     }

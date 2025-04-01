@@ -17,4 +17,26 @@ public class TriangleTests {
         var result = triangle.calculateArea();
         Assertions.assertEquals(6.0, result);
     }
+
+    @Test
+    void cannotCreateTriangleWithNegativeSide() {
+        try {
+            new Triangle(-3.0, 4.0, 5.0);
+            Assertions.fail();
+        }
+        catch (IllegalArgumentException exception) {
+            //
+        }
+    }
+
+    @Test
+    void cannotCreateTriangleWithoutTriangleInequality () {
+        try {
+            new Triangle(1.0, 2.0, 5.0);
+            Assertions.fail();
+        }
+        catch (IllegalArgumentException exception) {
+            //
+        }
+    }
 }
