@@ -19,4 +19,19 @@ public record Triangle (double side1, double side2, double side3) {
         double halfPerimeter = calculatePerimeter() / 2;
         return Math.sqrt(halfPerimeter * (halfPerimeter - this.side1) * (halfPerimeter - this.side2) * (halfPerimeter - this.side3));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Triangle triangle = (Triangle) o;
+
+        return ((triangle.side1 == this.side1) && (triangle.side2 == this.side2) && (triangle.side3 == this.side3)) ||
+                ((triangle.side1 == this.side2) && (triangle.side2 == this.side3) && (triangle.side3 == this.side1)) ||
+                ((triangle.side1 == this.side3) && (triangle.side2 == this.side1) && (triangle.side3 == this.side2));
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
+    }
 }
