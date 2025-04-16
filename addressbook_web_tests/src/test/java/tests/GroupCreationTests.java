@@ -2,52 +2,49 @@ package tests;
 
 import models.GroupData;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupCreationTests extends TestBase {
 
-    @Test
-    public void canCreateGroup() {
+    public static List<GroupData> groupProvider() {
+        var result = new ArrayList<GroupData>();
+        for (var name : List.of("", "group name")) {
+            for (var header : List.of("", "group header")) {
+                for (var footer : List.of("", "group footer")) {
+                    result.add(new GroupData(name, header, footer));
+                }
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            result.add(new GroupData(randomString(i*5), randomString(i*5), randomString(i*5)));
+        }
+        return result;
+    }
+
+    public static List<GroupData> negativeGroupProvider() {
+        return new ArrayList<GroupData>(List.of(
+                new GroupData("group name'", "", "")));
+    }
+
+    @ParameterizedTest
+    @MethodSource("groupProvider")
+    public void CarCreateGroup(GroupData group) {
         int groupCount = app.groups().getCount();
-        app.groups().createGroup(new GroupData("group name", "group header", "group header"));
+        app.groups().createGroup(group);
         int newGroupCount = app.groups().getCount();
         Assertions.assertEquals(groupCount + 1, newGroupCount);
     }
 
-    @Test
-    public void canCreateGroupWithEmptyName() {
-        app.groups().createGroup(new GroupData());
-    }
-
-    @Test
-    public void canCreateGroupWithNameOnly() {
-        var emptyGroup = new GroupData();
-        var groupWithName = emptyGroup.withName("name");
-        app.groups().createGroup(groupWithName);
-    }
-
-    @Test
-    public void canCreateGroupWithHeaderOnly() {
-        var emptyGroup = new GroupData();
-        var groupWithName = emptyGroup.withHeader("name");
-        app.groups().createGroup(groupWithName);
-    }
-
-    @Test
-    public void canCreateGroupWithFooterOnly() {
-        app.groups().createGroup(new GroupData().withFooter("name"));
-    }
-
-    @Test
-    public void canCreateMultipleGroups() {
-        int n = 2;
+    @ParameterizedTest
+    @MethodSource("negativeGroupProvider")
+    public void canNotCreateGroup(GroupData group) {
         int groupCount = app.groups().getCount();
-
-        for (int i = 0; i < n; i++) {
-            app.groups().createGroup(new GroupData(randomString(i), "group header", "group header"));
-        }
-
+        app.groups().createGroup(group);
         int newGroupCount = app.groups().getCount();
-        Assertions.assertEquals(groupCount + n, newGroupCount);
+        Assertions.assertEquals(groupCount, newGroupCount);
     }
 }
