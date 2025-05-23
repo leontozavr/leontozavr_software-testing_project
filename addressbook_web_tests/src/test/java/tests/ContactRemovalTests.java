@@ -17,8 +17,7 @@ public class ContactRemovalTests extends TestBase {
         var oldIds = app.contacts().getList();
         var rnd = new Random();
         var index = rnd.nextInt(oldIds.size());
-        var idToDelete = oldIds.get(index);
-        app.contacts().removeContact(idToDelete);
+        app.contacts().removeContact(oldIds.get(index));
         var newIds = app.contacts().getList();
         var expected = new ArrayList<>(oldIds);
         expected.remove(index);
