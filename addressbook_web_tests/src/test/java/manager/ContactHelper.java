@@ -49,7 +49,7 @@ public class ContactHelper extends HelperBase {
     }
 
     private void initContactModification(ContactData contact) {
-        click(By.cssSelector(String.format("a[href='edit.php?=%s']", contact.id())));
+        click(By.xpath(String.format("//a[@href='edit.php?id=%s']", contact.id())));
     }
 
     private void submitContactModification() {
