@@ -4,23 +4,31 @@ import models.ContactData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class ContactRemovalTests extends TestBase {
 
     @Test
     public void canRemovalContact() {
         if (app.contacts().getCount() == 0) {
-            app.contacts().createContact(new ContactData("First", "Middle", "Last", "Nick"));
+            app.contacts().createContact(new ContactData("", "First", "Middle", "Last", ""));
         }
-        int contactCount = app.contacts().getCount();
-        app.contacts().removeContact();
-        int newContactCount = app.contacts().getCount();
-        Assertions.assertEquals(contactCount - 1, newContactCount);
+        var oldIds = app.contacts().getList();
+        var rnd = new Random();
+        var index = rnd.nextInt(oldIds.size());
+        var idToDelete = oldIds.get(index);
+        app.contacts().removeContact(idToDelete);
+        var newIds = app.contacts().getList();
+        var expected = new ArrayList<>(oldIds);
+        expected.remove(index);
+        Assertions.assertEquals(newIds, expected);
     }
 
     @Test
     void canRemoveAllContactsAtOnce() {
         if (app.contacts().getCount() == 0) {
-            app.contacts().createContact(new ContactData("First", "Middle", "Last", "Nick"));
+            app.contacts().createContact(new ContactData("", "First", "Middle", "Last", ""));
         }
         app.contacts().removeAllContacts();
         Assertions.assertEquals(0, app.contacts().getCount());

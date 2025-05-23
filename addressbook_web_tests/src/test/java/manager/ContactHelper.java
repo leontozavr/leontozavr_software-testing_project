@@ -3,6 +3,9 @@ package manager;
 import models.ContactData;
 import org.openqa.selenium.By;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ContactHelper extends HelperBase {
 
     public ContactHelper(ApplicationManager manager) {
@@ -31,15 +34,25 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("add new"));
     }
 
-    public void removeContact() {
+    private void removeSelectedContacts() {
+        click(By.cssSelector("[value=Delete]"));
+    }
+
+    private void modifyContact(ContactData contact, ContactData modifiedContact) {
         openContactsPage();
-        selectContact();
-        removeSelectedContacts();
+        selectContact(contact);
+        initContactModification(contact);
+        fillContactForm(modifiedContact);
+        submitContactModification();
         returnToContactsPage();
     }
 
-    private void removeSelectedContacts() {
-        click(By.cssSelector("[value=Delete]"));
+    private void initContactModification(ContactData contact) {
+        click(By.cssSelector(String.format("a[href='edit.php?=%s']", contact.id())));
+    }
+
+    private void submitContactModification() {
+        click(By.name("update"));
     }
 
     private void returnToContactsPage() {
@@ -53,13 +66,20 @@ public class ContactHelper extends HelperBase {
         type(By.name("nickname"), contact.nickName());
     }
 
-    private void selectContact() {
-        click(By.name("selected[]"));
+    private void selectContact(ContactData contact) {
+        click(By.cssSelector(String.format("input[value='%s']", contact.id())));
     }
 
     public int getCount() {
         openContactsPage();
         return manager.driver.findElements(By.name("selected[]")).size();
+    }
+
+    public void removeContact(int id) {
+        openContactsPage();
+        manager.driver.findElement(By.cssSelector("input[value='" + id + "']")).click();
+        removeSelectedContacts();
+        returnToContactsPage();
     }
 
     public void removeAllContacts() {
@@ -73,5 +93,16 @@ public class ContactHelper extends HelperBase {
         for (var checkbox : checkboxes) {
             checkbox.click();
         }
+    }
+
+    public List<Integer> getList() {
+        openContactsPage();
+        var ids = new ArrayList<Integer>();
+        var rows = manager.driver.findElements(By.cssSelector("tr[name='entry']"));
+        for (var row : rows) {
+            String idStr = row.findElement(By.tagName("input")).getAttribute("value");
+            ids.add(Integer.parseInt(idStr));
+        }
+        return ids;
     }
 }

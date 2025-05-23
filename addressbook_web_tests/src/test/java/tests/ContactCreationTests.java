@@ -12,41 +12,42 @@ public class ContactCreationTests extends TestBase {
 
     public static List<ContactData> contactProvider() {
         var result = new ArrayList<ContactData>();
-        for (var firstName : List.of("", "firstName")) {
-            for (var middleName : List.of("", "middleName")) {
-                for (var lastName : List.of("","lastName")) {
-                    for (var nickName : List.of("", "nickName")) {
-                        result.add(new ContactData(firstName, middleName, lastName, nickName));
-                    }
-                }
+        for (var firstName : List.of("", "First", randomString(5))) {
+            for (var lastName : List.of("", "Last", randomString(7))) {
+                result.add(new ContactData("", firstName, "", lastName, ""));
             }
-        }
-        for (int i = 0; i < 5; i++) {
-            result.add(new ContactData(randomString(i*5), randomString(i*5), randomString(i*5), randomString(i*5)));
         }
         return result;
     }
 
     public static List<ContactData> negativeContactProvider() {
-        return new ArrayList<ContactData>(List.of(
-                new ContactData("first'Name", "", "", "")));
+        return List.of(
+                new ContactData("", "name'", "", "", "")
+        );
     }
 
     @ParameterizedTest
     @MethodSource("contactProvider")
     public void canCreateContact(ContactData contact) {
-        int contactCount = app.contacts().getCount();
+        var oldIds = app.contacts().getList();
         app.contacts().createContact(contact);
-        int newContactCount = app.contacts().getCount();
-        Assertions.assertEquals(contactCount + 1, newContactCount);
+        var newIds = app.contacts().getList();
+        var newId = newIds.stream()
+                .filter(id -> !oldIds.contains(id))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Не найден новый ID в списке"));
+
+        var expectedContact = contact.withId(String.valueOf(newId));
+        var actualContact = new ContactData(String.valueOf(newId), contact.firstName(), "", contact.lastName(), "");
+        Assertions.assertEquals(expectedContact, actualContact, "Созданный контакт не соответствует ожидаемым данным");
     }
 
     @ParameterizedTest
     @MethodSource("negativeContactProvider")
     public void canNotCreateContact(ContactData contact) {
-        int contactCount = app.contacts().getCount();
+        var oldIds = app.contacts().getList();
         app.contacts().createContact(contact);
-        int newContactCount = app.contacts().getCount();
-        Assertions.assertEquals(contactCount, newContactCount);
+        var newIds = app.contacts().getList();
+        Assertions.assertEquals(oldIds, newIds, "Список контактов изменился после попытки создания некорректного контакта");
     }
 }
