@@ -62,9 +62,7 @@ public class ContactHelper extends HelperBase {
 
     private void fillContactForm(ContactData contact) {
         type(By.name("firstname"), contact.firstName());
-        type(By.name("middlename"), contact.middleName());
         type(By.name("lastname"), contact.lastName());
-        type(By.name("nickname"), contact.nickName());
     }
 
     private void selectContact(ContactData contact) {
@@ -104,7 +102,7 @@ public class ContactHelper extends HelperBase {
             var id = row.findElement(By.tagName("input")).getAttribute("value");
             var firstName = row.findElement(By.xpath(".//td[3]")).getText();
             var lastName = row.findElement(By.xpath(".//td[2]")).getText();
-            contacts.add(new ContactData(id, firstName, "", lastName, ""));
+            contacts.add(new ContactData(id, firstName, lastName));
         }
         return contacts;
     }

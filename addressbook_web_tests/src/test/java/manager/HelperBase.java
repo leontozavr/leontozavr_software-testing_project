@@ -2,6 +2,8 @@ package manager;
 
 import org.openqa.selenium.By;
 
+import java.nio.file.Paths;
+
 public class HelperBase {
 
     protected final ApplicationManager manager;
