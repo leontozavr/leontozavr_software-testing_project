@@ -24,23 +24,33 @@ public class GroupCreationTests extends TestBase {
         return result;
     }
 
+    public static List<GroupData> singleRandomGroup(){
+        return List.of(new GroupData()
+                .withName(CommonFunctions.randomString(10))
+                .withHeader(CommonFunctions.randomString(10))
+                .withFooter(CommonFunctions.randomString(10)));
+    }
+
     public static List<GroupData> negativeGroupProvider() {
         return new ArrayList<GroupData>(List.of(
                 new GroupData("", "group name'", "", "")));
     }
 
     @ParameterizedTest
-    @MethodSource("groupProvider")
+    @MethodSource("singleRandomGroup")
     public void CarCreateGroup(GroupData group) {
-        var oldGroups = app.groups().getList();
+        var oldGroups = app.hbm().getGroupList();
+//        var oldGroups = app.jdbc().getGroupList();
         app.groups().createGroup(group);
-        var newGroups = app.groups().getList();
+        var newGroups = app.hbm().getGroupList();
+//        var newGroups = app.jdbc().getGroupList();
         Comparator<GroupData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
         };
         newGroups.sort(compareById);
+        var maxId = newGroups.getLast().id();
         var expectedList = new ArrayList<>(oldGroups);
-        expectedList.add(group.withId(newGroups.getLast().id()).withHeader("").withFooter(""));
+        expectedList.add(group.withId(maxId));
         expectedList.sort(compareById);
         Assertions.assertEquals(newGroups, expectedList);
     }

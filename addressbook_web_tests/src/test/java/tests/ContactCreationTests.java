@@ -2,7 +2,9 @@ package tests;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import common.CommonFunctions;
 import models.ContactData;
+import models.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -28,12 +30,18 @@ public class ContactCreationTests extends TestBase {
         );
     }
 
+    public static List<ContactData> singleRandomGroup(){
+        return List.of(new ContactData()
+                .withFirstName(CommonFunctions.randomString(10))
+                .withLastName(CommonFunctions.randomString(10)));
+    }
+
     @ParameterizedTest
-    @MethodSource("contactProvider")
+    @MethodSource("singleRandomGroup")
     public void canCreateContact(ContactData contact) {
-        var oldIds = app.contacts().getList();
+        var oldIds = app.hbm().getContactList();
         app.contacts().createContact(contact);
-        var newIds = app.contacts().getList();
+        var newIds = app.hbm().getContactList();
         var newId = newIds.stream()
                 .filter(id -> !oldIds.contains(id))
                 .findFirst()
