@@ -79,7 +79,7 @@ public class ContactHelper extends HelperBase {
         type(By.name("lastname"), contact.lastName());
     }
 
-    private void selectContact(ContactData contact) {
+    public void selectContact(ContactData contact) {
         click(By.cssSelector(String.format("input[value='%s']", contact.id())));
     }
 
@@ -119,5 +119,21 @@ public class ContactHelper extends HelperBase {
             contacts.add(new ContactData(id, firstName, lastName));
         }
         return contacts;
+    }
+
+
+    public void selectGroupFilter(GroupData group) {
+        new Select(manager.driver.findElement(By.name("group"))).selectByValue(group.id());
+    }
+
+    public void removeFromGroup() {
+        click(By.name("remove"));
+    }
+    public void selectAddToGroup(GroupData group) {
+        new Select(manager.driver.findElement(By.name("to_group"))).selectByValue(group.id());
+    }
+
+    public void addToGroup() {
+        click(By.name("add"));
     }
 }
