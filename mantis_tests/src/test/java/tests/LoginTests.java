@@ -10,4 +10,10 @@ public class LoginTests extends TestBase {
         manager.session().login("administrator", "root");
         Assertions.assertTrue(manager.session().isLoggedIn());
     }
+
+    @Test
+    void httpLogin() {
+        manager.http().login("administrator", "root");
+        Assertions.assertTrue(manager.http().isLoggedIn());
+    }
 }
