@@ -27,18 +27,18 @@ public class ContactCreationTests extends TestBase {
 
     public static List<ContactData> negativeContactProvider() {
         return List.of(
-                new ContactData("", "name'", "")
+                new ContactData("", "name'", "", "", "", "", "", "", "", "", "")
         );
     }
 
-    public static List<ContactData> singleRandomGroup(){
+    public static List<ContactData> singleRandomContact(){
         return List.of(new ContactData()
                 .withFirstName(CommonFunctions.randomString(10))
                 .withLastName(CommonFunctions.randomString(10)));
     }
 
     @ParameterizedTest
-    @MethodSource("singleRandomGroup")
+    @MethodSource("singleRandomContact")
     public void canCreateContact(ContactData contact) {
         var oldIds = app.hbm().getContactList();
         app.contacts().createContact(contact);
@@ -49,7 +49,17 @@ public class ContactCreationTests extends TestBase {
                 .orElseThrow(() -> new AssertionError("Не найден новый ID в списке"));
 
         var expectedContact = contact.withId(String.valueOf(newId));
-        var actualContact = new ContactData(String.valueOf(newId), contact.firstName(), contact.lastName());
+        var actualContact = new ContactData(String.valueOf(newId),
+                contact.firstName(),
+                contact.lastName(),
+                contact.address(),
+                contact.home(),
+                contact.mobile(),
+                contact.work(),
+                contact.fax(),
+                contact.email1(),
+                contact.email2(),
+                contact.email3());
         Assertions.assertEquals(expectedContact, actualContact, "Созданный контакт не соответствует ожидаемым данным");
     }
 
