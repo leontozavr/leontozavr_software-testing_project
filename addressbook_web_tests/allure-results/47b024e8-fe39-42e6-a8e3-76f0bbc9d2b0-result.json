@@ -1,0 +1,55 @@
+{
+  "attachments": [],
+  "description": "",
+  "fullName": "tests.ContactInfoTests.testInfo",
+  "historyId": "2b01e079d87db39fa488d060ec3e11ef",
+  "labels": [
+    {
+      "name": "junit.platform.uniqueid",
+      "value": "[engine:junit-jupiter]/[class:tests.ContactInfoTests]/[method:testInfo()]"
+    },
+    {
+      "name": "host",
+      "value": "DESKTOP-0A5RDF5"
+    },
+    {
+      "name": "thread",
+      "value": "6328@DESKTOP-0A5RDF5.Test worker(1)"
+    },
+    {
+      "name": "framework",
+      "value": "junit-platform"
+    },
+    {
+      "name": "language",
+      "value": "java"
+    },
+    {
+      "name": "package",
+      "value": "tests.ContactInfoTests"
+    },
+    {
+      "name": "testClass",
+      "value": "tests.ContactInfoTests"
+    },
+    {
+      "name": "testMethod",
+      "value": "testInfo"
+    },
+    {
+      "name": "suite",
+      "value": "tests.ContactInfoTests"
+    }
+  ],
+  "links": [],
+  "name": "testInfo()",
+  "parameters": [],
+  "stage": "finished",
+  "start": 1748356777727,
+  "status": "passed",
+  "steps": [],
+  "stop": 1748356784014,
+  "testCaseId": "[engine:junit-jupiter]/[class:tests.ContactInfoTests]/[method:testInfo()]",
+  "testCaseName": "testInfo()",
+  "uuid": "47b024e8-fe39-42e6-a8e3-76f0bbc9d2b0"
+}

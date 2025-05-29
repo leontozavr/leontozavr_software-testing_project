@@ -4,12 +4,24 @@ plugins {
 
 group = 'org.example'
 version = '1.0-SNAPSHOT'
+def allureVersion = '2.29.0'
+def aspectJVersion = '1.9.22'
 
 repositories {
     mavenCentral()
 }
 
+configurations {
+    agent {
+        canBeResolved = true
+        canBeConsumed = true
+    }
+}
+
 dependencies {
+    agent "org.aspectj:aspectjweaver:$aspectJVersion"
+    testImplementation platform("io.qameta.allure:allure-bom:$allureVersion")
+    testImplementation "io.qameta.allure:allure-junit5"
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.seleniumhq.selenium:selenium-java:4.30.0'
@@ -27,4 +39,5 @@ test {
     if (project.hasProperty("target")) {
         systemProperty("target", project.property("target"))
     }
+    jvmArgs = [ "-javaagent:${configurations.agent.singleFile}" ]
 }
