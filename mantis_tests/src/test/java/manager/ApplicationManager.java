@@ -17,13 +17,15 @@ public class ApplicationManager {
     private JamesCliHelper jamesCliHelper;
     private MailHelper mailHelper;
     private CreationHelper creationHelper;
+    private JamesApiHelper jamesApiHelper;
+    private RestApiHelper RestApiHelper;
 
     public void init(String browser, Properties properties) {
         this.browser = browser;
         this.properties = properties;
     }
 
-    public WebDriver driver(){
+    public WebDriver driver() {
         if (driver == null) {
             if (browser.equals("firefox")) {
                 driver = new FirefoxDriver();
@@ -46,7 +48,7 @@ public class ApplicationManager {
         return sessionHelper;
     }
 
-        public HttpSessionHelper http() {
+    public HttpSessionHelper http() {
         if (httpSessionHelper == null) {
             httpSessionHelper = new HttpSessionHelper(this);
         }
@@ -72,6 +74,20 @@ public class ApplicationManager {
             creationHelper = new CreationHelper(this);
         }
         return creationHelper;
+    }
+
+    public JamesApiHelper jamesApiHelper() {
+        if (jamesApiHelper == null) {
+            jamesApiHelper = new JamesApiHelper(this);
+        }
+        return jamesApiHelper;
+    }
+
+    public RestApiHelper rest() {
+        if (RestApiHelper == null) {
+            RestApiHelper = new RestApiHelper(this);
+        }
+        return RestApiHelper;
     }
 
     public String property(String name) {
